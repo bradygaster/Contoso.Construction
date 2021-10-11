@@ -10,11 +10,8 @@ param (
 Write-Host 'Creating resource group' -ForegroundColor Green
 az group create -l westus -n $resourceBaseName
 
-Write-Host 'Getting active Azure user identity' -ForegroundColor Green
-$env:identityGuid=$(az ad signed-in-user show --query "objectId")
-
 Write-Host 'Creating Azure resources' -ForegroundColor Green
-az deployment group create --resource-group $resourceBaseName --template-file deploy.bicep --parameters sqlUsername=$sqlServerDbUsername --parameters sqlPassword=$sqlServerDbPwd --parameters resourceBaseName=$resourceBaseName --parameters currentUserObjectId=$env:identityGuid --parameters apimPublisherEmail=$apiManagementOwnerEmail --parameters apimPublisherName=$apiManagementOwnerName
+az deployment group create --resource-group $resourceBaseName --template-file deploy.bicep --parameters sqlUsername=$sqlServerDbUsername --parameters sqlPassword=$sqlServerDbPwd --parameters resourceBaseName=$resourceBaseName --parameters currentUserObjectId=$(az ad signed-in-user show --query "objectId") --parameters apimPublisherEmail=$apiManagementOwnerEmail --parameters apimPublisherName=$apiManagementOwnerName
 
 Write-Host 'Building .NET 6 minimal API project' -ForegroundColor Green
 dotnet build ..\Contoso.Construction\Contoso.Construction.csproj
@@ -23,13 +20,20 @@ Write-Host 'Packaging .NET 6 minimal API project for deployment' -ForegroundColo
 dotnet publish ..\Contoso.Construction\Contoso.Construction.csproj --self-contained -r win-x86 -o ..\publish
 
 try {
+    dotnet tool install --global Zipper --version 1.0.1
+} catch {
+    # no work to do
+}
+
+try {
     Remove-Item -Path deployment.zip -Force
 }
 catch {
     # no work to do
 }
 
-Compress-Archive -Path ..\publish\*.* -DestinationPath deployment.zip -Force
+# Compress-Archive -Path ..\publish\*.* -DestinationPath deployment.zip -Force
+zipper compress -i ..\publish\ -o deployment.zip
 
 Write-Host 'Deploying .NET 6 minimal API project to Azure Web Apps' -ForegroundColor Green
 az webapp deploy -n "$($resourceBaseName)web" -g $resourceBaseName --src-path .\deployment.zip

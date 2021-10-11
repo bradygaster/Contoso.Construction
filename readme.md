@@ -1,6 +1,6 @@
 # Contoso Construction
 
-This repo contains .NET source code for the ASP.NET Core API highlighted in the CODE Magazine .NET 6 release issue for the article **Power Up your Power Apps with .NET 6 and Azure**. 
+This repo contains .NET source code for the ASP.NET Core API highlighted in the CODE Magazine .NET 6 release issue for the article **Power Up your Power Apps with .NET 6 and Azure**. (Link TBD)
 
 ## Prerequisites
 
@@ -17,24 +17,46 @@ To deploy the code to Azure, you'll need to have:
 
 To build a Power App that uses this API, you'd need to sign up for a [Power Apps account](http://powerapps.microsoft.com/).
 
-## Contributing
+## What's in this repository?
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+This repository's code is configured to use .NET Core 6 to access relational data in an Azure SQL Database and to store binary image uploads in an Azure Blob Storage container. Both of these resources' connection strings are stored in a Key Vault, so the web app can access them securely. All the resources are created by running the `setup/setup.ps1` file, which uses the [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) and [Azure Bicep](https://docs.microsoft.com/azure/azure-resource-manager/bicep/overview) to create the following resources:
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+* An Azure SQL Database server and database
+* An Azure Storage account to store images uploaded via the Power App UI
+* An Azure App Service to host the .NET 6 code in the repository and App Service plan (free mode)
+* An Azure API Management (consumption mode) instance
+* An Azure Key Vault instance to store the SQL DB and Storage connection strings
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+The `setup/deploy.bicep` file contains code that performs all of these actions:
 
-## Trademarks
+* Creates each of the resources in the appropriate order
+* Creates Key Vault secrets to store the SQL and Storage connection strings securely
+* Defines the active CLI user and the web app as the valid Key Vault identities
+* Imports the OpenAPI description produced from the .NET 6 minimal API project's endpoints into Azure API Management
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+## Get Started
+
+Here's how you can create this app in your own Azure subscription. First, login to the Azure CLI on your machine:
+
+```
+az login
+```
+
+Then, clone this repository:
+
+```
+git clone https://github.com/bradygaster/Contoso.Construction
+```
+
+Finally, CD into the `setup` directory and run the `setup.ps1` file:
+
+```
+cd Contoso.Construction\setup
+.\setup.ps1
+``` 
+
+Once the Azure resources are all created, `setup.ps1` compiles the .NET 6 code and publishes it using the `--self-contained` switch to make sure the .NET Core version runtime is installed with the app. The Azure CLI's `az webapp up` command uploads the site's code. Once the upload completes, the site's Swagger UI page is opened in the browser so you can start adding sample data. Or, you can browse to the API Management Service instance the script creates and find the API, then test it from within the API Management portal blade.
+
+## Feedback and contributions welcome
+
+Feel free to submit issues, fork the project and create pull requests. 
