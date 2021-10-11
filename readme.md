@@ -55,7 +55,7 @@ cd Contoso.Construction\setup
 .\setup.ps1
 ``` 
 
-Once the Azure resources are all created, `setup.ps1` compiles the .NET 6 code and publishes it using the `--self-contained` switch to make sure the .NET Core version runtime is installed with the app. The Azure CLI's `az webapp up` command uploads the site's code. Once the upload completes, the site's Swagger UI page is opened in the browser so you can start adding sample data. Or, you can browse to the API Management Service instance the script creates and find the API, then test it from within the API Management portal blade.
+Once the Azure resources are all created, `setup.ps1` compiles the .NET 6 code and publishes it using the `--self-contained` switch to make sure the .NET Core version runtime is installed with the app. The Azure CLI's `az webapp deploy` command uploads the site's code. Once the upload completes, the site's Swagger UI page is opened in the browser so you can start adding sample data. Or, you can browse to the API Management Service instance the script creates and find the API, then test it from within the API Management portal blade.
 
 ## Feedback and contributions welcome
 
