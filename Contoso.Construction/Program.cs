@@ -77,6 +77,11 @@ if (app.Environment.IsDevelopment())
         var db = scope.ServiceProvider.GetRequiredService<JobSiteDb>();
         db.Database.EnsureCreated();
     }
+
+    // Redirect root browses to the swagger page
+    app.MapGet("/", () => {
+        return Results.Redirect("/swagger");
+    });
 }
 
 // Enables GET of all jobs

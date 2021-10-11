@@ -25,3 +25,6 @@ Compress-Archive -Path ..\publish\*.* -DestinationPath deployment.zip -Force
 
 Write-Host 'Deploying .NET 6 minimal API project to Azure Web Apps' -ForegroundColor Green
 az webapp deploy -n "$($resourceBaseName)web" -g $resourceBaseName --src-path .\deployment.zip
+
+Write-Host 'Browsing to the test page of the app' -ForegroundColor Green
+az webapp browse -n "$($resourceBaseName)web" -g $resourceBaseName
