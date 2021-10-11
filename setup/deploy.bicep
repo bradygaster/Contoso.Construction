@@ -66,7 +66,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 
 resource sqlSecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   parent: keyVault
-  name: 'ConnectionStrings--AzureSqlConnectionString'
+  name: 'AzureSqlConnectionString'
   properties: {
     value: 'Data Source=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433; Initial Catalog=${resourceBaseName}db;User Id=${sqlUsername};Password=${sqlPassword};'
   }

@@ -2,13 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<OpenApiDocumentName>Contoso.JobSiteAppApi</OpenApiDocumentName>
 		<UserSecretsId>bdaccb8b-6cd1-43db-b1b7-baccbac3d698</UserSecretsId>
 	</PropertyGroup>
 
-	<Target Name="Generate OpenAPI Specification Document" AfterTargets="Build">
+	<!-- in case you want to build your OpenAPI description at project build time -->
+	<Target Name="Generate OpenAPI Specification Document">
 		<Exec Command="echo 'Generating OpenAPI file for $(OpenApiDocumentName)'" />
 		<Exec Command="dotnet swagger tofile --serializeasv2 --output $(MSBuildProjectDirectory)\$(AssemblyName).json $(OutputPath)$(AssemblyName).dll $(OpenApiDocumentName)" ContinueOnError="true" />
 	</Target>
@@ -22,14 +23,14 @@
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
 		<PackageReference Include="Azure.Storage.Files.Shares" Version="12.8.0" />
 		<PackageReference Include="Azure.Storage.Queues" Version="12.8.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.0-rc.2.21462.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-rc.2.21463.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-rc.2.21463.3">
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.0-rc.1.21452.15" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-rc.1.21452.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-rc.1.21452.10">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Azure" Version="1.1.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
 	</ItemGroup>
 
