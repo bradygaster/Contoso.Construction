@@ -21,6 +21,14 @@ dotnet build ..\Contoso.Construction\Contoso.Construction.csproj
 
 Write-Host 'Packaging .NET 6 minimal API project for deployment' -ForegroundColor Green
 dotnet publish ..\Contoso.Construction\Contoso.Construction.csproj --self-contained -r win-x86 -o ..\publish
+
+try {
+    Remove-Item -Path deployment.zip -Force
+}
+catch {
+    # no work to do
+}
+
 Compress-Archive -Path ..\publish\*.* -DestinationPath deployment.zip -Force
 
 Write-Host 'Deploying .NET 6 minimal API project to Azure Web Apps' -ForegroundColor Green
