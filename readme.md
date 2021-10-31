@@ -1,6 +1,6 @@
 # Contoso Construction
 
-This repo contains .NET source code for the ASP.NET Core API highlighted in the CODE Magazine .NET 6 release issue for the article **Power Up your Power Apps with .NET 6 and Azure**. (Link TBD)
+This repo contains .NET source code for the ASP.NET Core API highlighted in the CODE Magazine .NET 6 release issue for the article [**Power Up your Power Apps with .NET 6 and Azure**](https://www.codemag.com/article/2111102). 
 
 ## Prerequisites
 
